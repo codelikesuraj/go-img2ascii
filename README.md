@@ -2,7 +2,7 @@
 This is a cli tool that converts any jpeg, jpg or png image to an ascii representation.
 
 ## Usage
-```go run main.go [path_to_image] [width] [height]```
+```go run main.go [path-to-image] [character-width]```
 
 ## Todo
 - ✅ load and decode image file

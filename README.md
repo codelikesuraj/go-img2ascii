@@ -10,3 +10,4 @@ This is a cli tool that converts any jpeg, jpg or png image to an ascii represen
 - ✅ convert image to grayscale
 - ✅ map grayscaled image to ascii characters
 - ✅ save ascii'd image to file
+- ✅ refactor with any cli library (https://github.com/urfave/cli)

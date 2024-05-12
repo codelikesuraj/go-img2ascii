@@ -2,11 +2,13 @@ package main
 
 import (
 	"errors"
+	"fmt"
 	"image"
 	_ "image/jpeg"
 	_ "image/png"
 	"math"
 	"os"
+	"path/filepath"
 	"strconv"
 	"strings"
 	"time"
@@ -14,25 +16,30 @@ import (
 	"github.com/urfave/cli/v2"
 )
 
+var executableName = filepath.Base(os.Args[0])
+
 func main() {
 	// print duration
 	defer func(t time.Time) {
-		println("\nDuration: ", time.Since(t).String())
+		fmt.Println("\nDuration:", time.Since(t).String())
 	}(time.Now())
 
 	app := cli.NewApp()
-	app.Name = "go-img2ascii"
-	app.Usage = "An image-to-ascii converter"
-	app.UsageText = "go-img2ascii [path-to-image] [character-width]"
+	app.Name = executableName
+	app.Usage = "An image to ascii converter"
+	app.UsageText = executableName + " [path-to-image] [character-width]"
 	app.HideHelp = true
 	app.Action = func(ctx *cli.Context) error {
-		// get image path from arg
 		if ctx.NArg() < 1 {
 			return errors.New("no image path provided")
 		}
-		imgPath := ctx.Args().First()
+
+		if ctx.NArg() < 2 {
+			return errors.New("no width is provided")
+		}
 
 		// load image
+		imgPath := ctx.Args().First()
 		imgFile, err := os.Open(imgPath)
 		if err != nil {
 			return err
@@ -46,9 +53,6 @@ func main() {
 		}
 
 		// get width from args
-		if ctx.NArg() < 2 {
-			return errors.New("no width is provided")
-		}
 		width, _ := strconv.Atoi(ctx.Args().Get(1))
 		if width < 1 {
 			width = img.Bounds().Dx()
@@ -91,13 +95,13 @@ func main() {
 		}
 		newImageFile.Write(out)
 
-		print("File conversion completed\n")
-		print("\nOutput file: ", fileName, "\n")
+		fmt.Println("File conversion completed\n\nOutput file:", fileName)
+
 		return nil
 	}
 
 	if err := app.Run(os.Args); err != nil {
-		println("ERROR:", err.Error())
-		println("\nUSAGE: \n", app.UsageText)
+		fmt.Println("ERROR:\n", err.Error())
+		fmt.Println("\nUSAGE:\n", app.UsageText)
 	}
 }

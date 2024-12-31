@@ -57,6 +57,8 @@ func main() {
 		if width < 1 {
 			width = img.Bounds().Dx()
 		}
+
+		// calculate height while maintaining aspect ratio
 		height := width * img.Bounds().Dy() / img.Bounds().Dx()
 
 		// create new gray image
